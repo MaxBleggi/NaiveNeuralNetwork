@@ -18,13 +18,14 @@ public class DataTuple {
 
     private INDArray[] x;
     private INDArray y;
-    private int label;
+    private int labels;
     private int nRows;
     private int nCols;
 
-    public DataTuple(INDArray[] x, INDArray y) {
+    public DataTuple(INDArray[] x, INDArray y, int labels) {
         this.x = x;
         this.y = y;
+        this.labels = labels;
     }
 
     public INDArray[] getX() {
@@ -33,5 +34,9 @@ public class DataTuple {
 
     public INDArray getY() {
         return y;
+    }
+
+    public int getLabels() {
+        return labels;
     }
 }

@@ -1,4 +1,8 @@
 import Model.DataTuple;
+import Model.NNetworkInputLoad;
+import Model.TrainingData;
+import Model.ValidationData;
+import org.nd4j.linalg.api.iter.NdIndexIterator;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.cpu.nativecpu.NDArray;
 import org.nd4j.linalg.factory.Nd4j;
@@ -29,10 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import java.io.*;
 import java.util.zip.ZipFile;
@@ -77,11 +78,7 @@ public class MNIST_Loader {
         System.out.println("labels magic number is: " + labelMagicNumber);
         System.out.println("number of labels is: " + numberOfLabels);
 
-        // data rep. by n-dimensional array of 2-tuples, i.e. n rows, 2 columns
-        INDArray data = Nd4j.zeros(numberOfItems, 2);
-
         INDArray labelVector;
-        //INDArray imgMatrix = Nd4j.create(numberOfItems, nRows, nCols); // 3 dimensional matrix
 
         float[] labels = new float[numberOfLabels];
         INDArray[] imageMatrices = new INDArray[numberOfItems];
@@ -91,27 +88,16 @@ public class MNIST_Loader {
         // get each item W and put it in tuple with its label
         // create array one row at a time
         for(int i = 0; i < numberOfItems; i++) {
-            //MnistMatrix mnistMatrix = new MnistMatrix(nRows, nCols);
-            INDArray row = Nd4j.zeros(1, 2);
             double[][] imgData = new double[nRows][nCols];
-            //INDArray w = Nd4j.create(nRows, nCols);
-
-            //mnistMatrix.setLabel(labelInputStream.readUnsignedByte());
             labels[i] = labelInputStream.readUnsignedByte();
-
-           // System.out.println(labelInputStream.readInt());
 
             for (int r = 0; r < nRows; r++) {
                 for (int c = 0; c < nCols; c++) {
-                   // mnistMatrix.setValue(r, c, dataInputStream.readUnsignedByte());
                     imgData[r][c] = dataInputStream.readUnsignedByte();
                 }
             }
 
-
             // place the image matrix W into collection
-            //INDArray w = Nd4j.create(imgData);
-            //imgMatrix = Nd4j.concat(0, imgMatrix, w);
             imageMatrices[i] =  Nd4j.create(imgData);
         }
 
@@ -120,7 +106,7 @@ public class MNIST_Loader {
 
         dataInputStream.close();
         labelInputStream.close();
-        return new DataTuple(imageMatrices, labelVector);
+        return new DataTuple(imageMatrices, labelVector, numberOfLabels);
 
     }
 
@@ -136,17 +122,102 @@ public class MNIST_Loader {
      * Let TrainingData be a list containing 50,000 2-tuples X = (x,y) such that
      *      { x | [x] is 784-dimensional array corresponding to the 28x28 image Matrix }
      *      { y | [y] is 10-dimensional array corresponding to the unit vector for the correct image }
+     *
+     * Let ValidationData and TestData both be lists containing 10,000 2-tuples X' = (x,y') such that
+     *      { y' | 0 >= y' > 10 | representing the digit value of x }
+     *
+     *
+     *
      */
-    public void dataWrapper() {
+    public NNetworkInputLoad dataWrapper(String trData, String trLabel, String teData, String teLabel) throws IOException {
+
+        // load raw data from MNIST
+        DataTuple rawTrainingData = loadDataTrainingData(trData, trLabel);
+        DataTuple rawTestingData = loadDataTrainingData(teData, teLabel);
+
+        // image vector formatting
+        INDArray[] trainingImageVectors = formatImageVector(rawTrainingData);
+        INDArray[] testingImageVectors = formatImageVector(rawTestingData);
+
+        // label vector formatting
+        INDArray[] trainingLabelVectors = new INDArray[rawTrainingData.getLabels()];
+        double[] correctLabels = new double[rawTestingData.getLabels()];
+
+        // iterate over the y Vector in training data
+        INDArray trainingLabels = rawTrainingData.getY();
+        NdIndexIterator iter = new NdIndexIterator(trainingLabels.rows(), trainingLabels.columns());
+        int trainingIndex = 0;
+        while (iter.hasNext()) {
+            int[] nextIndex = iter.next();
+            double nextVal = trainingLabels.getDouble(nextIndex);
+
+            // format y into V such that
+            // V == [a_0, ..., a_9] such that a_i = { 1 | i = correct digit representing M , 0 otherwise }
+            trainingLabelVectors[trainingIndex] = vectorizedResults(nextVal);
+            trainingIndex++;
+        }
+
+        INDArray testingLabels = rawTestingData.getY();
+        NdIndexIterator iter2 = new NdIndexIterator(testingLabels.rows(), testingLabels.columns());
+        int testingIndex = 0;
+        while (iter2.hasNext()) {
+            int[] nextIndex = iter2.next();
+            double nextVal = testingLabels.getDouble(nextIndex);
+
+            correctLabels[testingIndex] = nextVal;
+            testingIndex++;
+        }
 
 
+        // ensure there is an equal amount of image vectors to label vectors
+        assert trainingImageVectors.length == trainingIndex;
+        assert testingImageVectors.length == testingIndex;
+
+        // encapsulate data in a package for export
+        // training data
+        TrainingData[] formattedTrainingData = new TrainingData[trainingIndex];
+        for (int i = 0; i < trainingIndex; i++) {
+            // create the list of 2-tuples
+            formattedTrainingData[i] = new TrainingData(trainingImageVectors[i], trainingLabelVectors[i]);
+        }
+
+        // validation & testing data
+        ValidationData[] formattedValidationData = new ValidationData[testingIndex];
+        ValidationData[] formattedTestingData = new ValidationData[testingIndex];
+        for (int i = 0; i < testingIndex; i++) {
+            // create the list of 2-tuples
+            formattedValidationData[i] = new ValidationData(testingImageVectors[i], (int)correctLabels[i]);
+            formattedTestingData[i] = new ValidationData(testingImageVectors[i], (int)correctLabels[i]);
+        }
+
+        return new NNetworkInputLoad(formattedTrainingData, formattedValidationData, formattedTestingData);
     }
 
+    // format x such into M such that
+    // Let M = [a_11, ..., a_mn] such that (a_ij) elementOf( R^(m*n) )
+    // abstractly, M is a matrix representing 28x28 image
+    private INDArray[] formatImageVector(DataTuple rawData) {
+
+        INDArray[] trainingImageVectors = new INDArray[rawData.getX().length];
+        int i = 0;
+
+        for (INDArray M : rawData.getX()) {
+            // reshape M into (784 x 1) Vector
+            trainingImageVectors[i] = M.reshape(784, 1);
+            i++;
+        }
+
+        return trainingImageVectors;
+    }
+
+
     /**
-     * Returns a 10-dimensional unit vector with a 1 in the jth position and zeros elsewhere.
+     * Returns a 10-dimensional unit vector with a 1.0 in the ith position and zeros elsewhere.
      * Used to convert a 0-9 digit into a corresponding desired output from the nnetwork
      */
-    public void vectorizedResults() {
-
+    public INDArray vectorizedResults(double i) {
+        INDArray v = Nd4j.zeros(10,1);
+        v.putScalar((int)i,0,1.0);
+        return v;
     }
 }
