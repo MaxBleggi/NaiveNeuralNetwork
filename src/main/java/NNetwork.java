@@ -49,7 +49,6 @@ public class NNetwork {
 
         // list of seeds for biases using normal distribution
         for (int i = 0, len = this.layerCount - 1; i < len; i++) {
-            Random rnd = new Random();
             //biases[i] = Nd4j.ones(sizes[i+1],1);
            //weights[i] = Nd4j.ones(sizes[i+1],sizes[i]);
 
@@ -63,9 +62,10 @@ public class NNetwork {
 
         INDArray prod = Nd4j.create(M.rows(), M.columns());
 
-        Random rnd = new Random();  // TODO test initializing rnd in loops for more initial variation
+          // TODO test initializing rnd in loops for more initial variation
         for(int i = 0, r = M.rows(); i < r; i++) {
             for (int j = 0, c = M.columns(); j < c; j++) {
+                Random rnd = new Random();
                 prod.put(i, j, M.getDouble(i, j) * rnd.nextGaussian());
             }
         }
@@ -106,7 +106,11 @@ public class NNetwork {
         int testDataSize = testData.length;
 
         for (int i = 0; i < epochs; i++) {
-            for (int j = 0; j < trainDataSize - miniBatchSize; j += miniBatchSize) {
+
+            // TODO test shuffling data for better distribution
+            fisherYatesShuffle(trainingData);
+
+            for (int j = 0, diff = trainDataSize - miniBatchSize; j < diff; j += miniBatchSize) {
                 // split array into two
                // TrainingData[] first = new TrainingData[miniBatchSize];
              //   System.arraycopy(trainingData, j, first, 0, j + miniBatchSize);
@@ -114,9 +118,22 @@ public class NNetwork {
                 TrainingData[] newBatch = Arrays.copyOfRange(trainingData, j, j + miniBatchSize);
                 updateBatch(newBatch, eta);
             }
+
             System.out.println("#### eval time ####");
             int correct = evaluate(testData);
             System.out.println("Epoch " + (i + 1) + ": " + correct + "/" + testDataSize);
+        }
+    }
+
+    private void fisherYatesShuffle(TrainingData[] arr) {
+        Random rnd = new Random();
+        for (int i = arr.length - 1; i > 0; i--)
+        {
+            int index = rnd.nextInt(i + 1);
+            // Simple swap
+            TrainingData a = arr[index];
+            arr[index] = arr[i];
+            arr[i] = a;
         }
     }
 
@@ -148,11 +165,13 @@ public class NNetwork {
 
         for (int i = 0, len = this.layerCount - 1; i < len; i++) {
             // w - (eta / len(batch)) * nw
-            INDArray tmp = nabla_w[i].mul(eta / batchSize);
+            INDArray tmp = nabla_w[i].mul((eta / batchSize));
+
             weights[i] = weights[i].sub(tmp);
             //INDArray nwee = tmp.sub(weights[i]);
 
-            tmp = nabla_b[i].mul(eta / batchSize);
+            tmp = nabla_b[i].mul((eta / batchSize));
+
             biases[i] = biases[i].sub(tmp);
         }
     }
@@ -166,8 +185,14 @@ public class NNetwork {
         INDArray[] nabla_b_2 = new INDArray[this.layerCount - 1];
         INDArray[] nabla_w_2 = new INDArray[this.layerCount - 1];
 
-        System.arraycopy(nabla_b, 0, nabla_b_2, 0, nabla_b_2.length);
-        System.arraycopy(nabla_w, 0, nabla_w_2, 0, nabla_w_2.length);
+        // TODO possible bug, may need to recreate nabla
+        //System.arraycopy(nabla_b, 0, nabla_b_2, 0, nabla_b_2.length);
+        //System.arraycopy(nabla_w, 0, nabla_w_2, 0, nabla_w_2.length);
+
+        for(int i = 0, len = this.layerCount - 1; i < len; i++){
+            nabla_b_2[i] = Nd4j.create(biases[i].rows(), biases[i].columns());
+            nabla_w_2[i] = Nd4j.create(weights[i].rows(), weights[i].columns());
+        }
 
         INDArray activation = trainingData.getX();
         List<INDArray> activations = new ArrayList<INDArray>();
@@ -199,6 +224,7 @@ public class NNetwork {
             nabla_b_2[i] = delta;
             nabla_w_2[i] = delta.mmul(activations.get(i).transpose());
         }
+
         List<INDArray[]> ret = new ArrayList<INDArray[]>();
         ret.add(nabla_b_2);
         ret.add(nabla_w_2);
@@ -210,23 +236,32 @@ public class NNetwork {
      */
     public int evaluate(ValidationData[] testData) {
         int numberCorrect = 0;
-        System.out.println("begin eval");
+
         for (ValidationData tuple : testData) {
             INDArray output = feedForward(tuple.getX());
 
             int maxResultRow = 0;
             int maxOutputRow = 0;
 
-            for (int i = 0, rows = tuple.getX().rows(); i < rows; i++) {
+
+           // for (int i = 0, rows = tuple.getX().rows(); i < rows; i++) {
                 // get index the result and output rows with the highest value
 
-                maxOutputRow = getMaxIndex(output, maxOutputRow);
+              //  maxOutputRow = getMaxIndex(output, maxOutputRow);
 
-                maxResultRow = getMaxIndex(tuple.getX(), maxResultRow);
-            }
+               // maxResultRow = getMaxIndex(tuple.getX(), maxResultRow);
+
+//                if (tuple.getX().getDouble(i, 0) > tuple.getX().getDouble(maxResultRow, 0))
+//                    maxResultRow = i;
+                //if (output.getDouble(i, 0) > output.getDouble(maxOutputRow, 0))
+                 //   maxOutputRow = i;
+          //  }
+            maxOutputRow = getMaxIndex(output);
+
 
             // if they match, NNetowrk thought correctly!
-            numberCorrect += maxOutputRow == maxResultRow ? 1 : 0;
+            System.out.println(maxOutputRow == tuple.getY());
+            numberCorrect += maxOutputRow == tuple.getY() ? 1 : 0;
         }
 
         return numberCorrect;
@@ -253,25 +288,31 @@ public class NNetwork {
         // let s = sigmoid(z) and I be the NxN identity matrix
         // returns s * (I - z)
         INDArray sig = sigmoid(z);
-        sig = z.sub(1);
+        INDArray ones = Nd4j.ones(sig.rows(), sig.columns()); // TODO test
+        sig = ones.sub(sig);
+        //sig = sig.sub(1);
 
         return hadamardProduct(sigmoid(z), sig);  // TODO may need to use z.cols or hamardProd
     }
 
-    private int getMaxIndex(INDArray a, int comp) {
+    private int getMaxIndex(INDArray a) {
         NdIndexIterator iter2 = new NdIndexIterator(a.rows(), a.columns());
+
+        double biggest = 0.0;
+        int biggestIndex = 0;
         int i = 0;
         while (iter2.hasNext()) {
             int[] nextIndex = iter2.next();
             double nextVal = a.getDouble(nextIndex);
 
-            if (nextVal > comp) {
-                return i;
+            if (nextVal > biggest) {
+                biggest = nextVal;
+                biggestIndex = i;
             }
             i++;
         }
 
-        return comp;
+        return biggestIndex;
     }
 
     /**

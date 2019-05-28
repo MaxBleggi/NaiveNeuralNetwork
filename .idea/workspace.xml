@@ -1,27 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/main/java/NNetwork.java" line="132" />
+    <bookmark url="file://$PROJECT_DIR$/src/main/java/NNetwork.java" line="149" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f8d39f97-5737-479a-a021-201d8bf02ad1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_bytedeco_javacpp_1_4.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_bytedeco_javacpp_presets_openblas_0_2_20_1_4.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_bytedeco_javacpp_presets_openblas_android_arm_0_2_20_1_4.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_bytedeco_javacpp_presets_openblas_android_x86_0_2_20_1_4.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_bytedeco_javacpp_presets_openblas_linux_armhf_0_2_20_1_4.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_bytedeco_javacpp_presets_openblas_linux_ppc64le_0_2_20_1_4.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_bytedeco_javacpp_presets_openblas_linux_x86_0_2_20_1_4.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_bytedeco_javacpp_presets_openblas_linux_x86_64_0_2_20_1_4.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_bytedeco_javacpp_presets_openblas_macosx_x86_64_0_2_20_1_4.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_bytedeco_javacpp_presets_openblas_platform_0_2_20_1_4.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_bytedeco_javacpp_presets_openblas_windows_x86_0_2_20_1_4.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_bytedeco_javacpp_presets_openblas_windows_x86_64_0_2_20_1_4.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NeuralNetwork.iml" beforeDir="false" afterPath="$PROJECT_DIR$/NeuralNetwork.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Driver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Driver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/MNIST_Loader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MNIST_Loader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/NNetwork.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/NNetwork.java" afterDir="false" />
     </list>
@@ -41,8 +24,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Driver.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="17" column="44" lean-forward="true" selection-start-line="17" selection-start-column="44" selection-end-line="17" selection-end-column="44" />
+            <state relative-caret-position="493">
+              <caret line="29" column="58" selection-start-line="29" selection-start-column="50" selection-end-line="29" selection-end-column="58" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -71,8 +54,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/NNetwork.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="334">
-              <caret line="190" column="48" selection-start-line="190" selection-start-column="48" selection-end-line="190" selection-end-column="48" />
+            <state relative-caret-position="540">
+              <caret line="241" lean-forward="true" selection-start-line="241" selection-end-line="241" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#6788#6798#0" expanded="true" />
@@ -80,8 +63,8 @@
                 <element signature="e#6182#6194#0" expanded="true" />
                 <element signature="e#6505#6506#0" expanded="true" />
                 <element signature="e#6544#6545#0" expanded="true" />
-                <element signature="e#6456#6457#0" expanded="true" />
-                <element signature="e#6529#6530#0" expanded="true" />
+                <element signature="e#9757#9758#0" expanded="true" />
+                <element signature="e#9831#9832#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -90,9 +73,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Model/TrainingData.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="19" selection-start-line="19" selection-end-line="19" />
+            <state relative-caret-position="119">
+              <caret line="7" column="91" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="91" />
               <folding>
+                <element signature="e#510#511#0" expanded="true" />
                 <element signature="e#534#535#0" expanded="true" />
                 <element signature="e#564#565#0" expanded="true" />
                 <element signature="e#588#589#0" expanded="true" />
@@ -102,13 +86,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/MNIST_Loader.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Model/ValidationData.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="267">
-              <caret line="72" column="18" lean-forward="true" selection-start-line="72" selection-start-column="18" selection-end-line="72" selection-end-column="18" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="238">
+              <caret line="14" column="19" lean-forward="true" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -224,6 +205,14 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="NaiveNeuralNetwork" type="b2602c69:ProjectViewProjectNode" />
+              <item name="NaiveNeuralNetwork" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="Model" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -287,7 +276,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="70857000" />
+    <option name="totallyTimeSpent" value="77533000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -308,11 +297,11 @@
       <window_info id="UI Designer" order="3" />
       <window_info id="Capture Tool" order="4" />
       <window_info id="Favorites" order="5" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="6" visible="true" weight="0.27552673" />
+      <window_info content_ui="combo" id="Project" order="6" visible="true" weight="0.19124797" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3182297" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.3899371" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.15303983" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3773585" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3298731" />
@@ -342,19 +331,16 @@
     </ignored-roots>
   </component>
   <component name="XDebuggerManager">
-    <watches-manager>
-      <configuration name="Application">
-        <watch expression="((NNetwork)this).weights[0]" custom="NNetwork" />
-        <watch expression="activation" />
-        <watch expression="weights[i]" language="JAVA" />
-        <watch expression="nabla_w[1]" />
-        <watch expression="weights[i]" language="JAVA" />
-        <watch expression="weights" language="JAVA" />
-        <watch expression="nabla_w[0]" />
-        <watch expression="weights" language="JAVA" />
-        <watch expression="batch" />
-      </configuration>
-    </watches-manager>
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/NNetwork.java</url>
+          <line>122</line>
+          <properties />
+          <option name="timeStamp" value="24" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
@@ -397,19 +383,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Model/TestingData.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/Model/ValidationData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="19" lean-forward="true" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
-          <folding>
-            <element signature="e#518#519#0" expanded="true" />
-            <element signature="e#542#543#0" expanded="true" />
-            <element signature="e#567#568#0" expanded="true" />
-            <element signature="e#591#592#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Model/NNetworkInputLoad.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -445,13 +418,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Driver.java">
+    <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="17" column="44" lean-forward="true" selection-start-line="17" selection-start-column="44" selection-end-line="17" selection-end-column="44" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="330">
+          <caret line="31" column="31" selection-start-line="31" selection-start-column="31" selection-end-line="31" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/Desktop/dl4j/nd4j-api-0.7.2.jar!/org/nd4j/linalg/api/ops/impl/transforms/Sigmoid.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-306">
+          <caret line="39" column="11" selection-start-line="39" selection-start-column="11" selection-end-line="39" selection-end-column="11" />
         </state>
       </provider>
     </entry>
@@ -464,26 +441,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/MNIST_Loader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="72" column="18" lean-forward="true" selection-start-line="72" selection-start-column="18" selection-end-line="72" selection-end-column="18" />
+        <state relative-caret-position="283">
+          <caret line="213" column="43" lean-forward="true" selection-start-line="213" selection-start-column="43" selection-end-line="213" selection-end-column="43" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="31" column="31" selection-start-line="31" selection-start-column="31" selection-end-line="31" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Model/TrainingData.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" selection-start-line="19" selection-end-line="19" />
+        <state relative-caret-position="119">
+          <caret line="7" column="91" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="91" />
           <folding>
+            <element signature="e#510#511#0" expanded="true" />
             <element signature="e#534#535#0" expanded="true" />
             <element signature="e#564#565#0" expanded="true" />
             <element signature="e#588#589#0" expanded="true" />
@@ -491,10 +462,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Driver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="29" column="58" selection-start-line="29" selection-start-column="50" selection-end-line="29" selection-end-column="58" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Model/ValidationData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="19" lean-forward="true" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/NNetwork.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
-          <caret line="190" column="48" selection-start-line="190" selection-start-column="48" selection-end-line="190" selection-end-column="48" />
+        <state relative-caret-position="540">
+          <caret line="241" lean-forward="true" selection-start-line="241" selection-end-line="241" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#6788#6798#0" expanded="true" />
@@ -502,8 +490,8 @@
             <element signature="e#6182#6194#0" expanded="true" />
             <element signature="e#6505#6506#0" expanded="true" />
             <element signature="e#6544#6545#0" expanded="true" />
-            <element signature="e#6456#6457#0" expanded="true" />
-            <element signature="e#6529#6530#0" expanded="true" />
+            <element signature="e#9757#9758#0" expanded="true" />
+            <element signature="e#9831#9832#0" expanded="true" />
           </folding>
         </state>
       </provider>
