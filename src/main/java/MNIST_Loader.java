@@ -66,6 +66,13 @@ public class MNIST_Loader {
         int nRows = dataInputStream.readInt();
         int nCols = dataInputStream.readInt();
 
+        int k = 0;
+        if (numberOfItems > 30000) {
+            // TODO remove me after testing
+            numberOfItems = 10000;
+            k = 1;
+        }
+
         System.out.println("magic number is " + magicNumber);
         System.out.println("number of items is " + numberOfItems);
         System.out.println("number of rows is: " + nRows);
@@ -74,6 +81,9 @@ public class MNIST_Loader {
         DataInputStream labelInputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(labelFile)));
         int labelMagicNumber = labelInputStream.readInt();
         int numberOfLabels = labelInputStream.readInt();
+        if (k==1) {
+            numberOfLabels = numberOfItems;
+        }
 
         System.out.println("labels magic number is: " + labelMagicNumber);
         System.out.println("number of labels is: " + numberOfLabels);

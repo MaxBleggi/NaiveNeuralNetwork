@@ -13,6 +13,7 @@ import org.nd4j.nativeblas.Nd4jCpu;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -49,33 +50,44 @@ public class NNetwork {
         // list of seeds for biases using normal distribution
         for (int i = 0, len = this.layerCount - 1; i < len; i++) {
             Random rnd = new Random();
-            biases[i] = Nd4j.ones(sizes[i+1],1);
-            weights[i] = Nd4j.ones(sizes[i+1],sizes[1]);
+            //biases[i] = Nd4j.ones(sizes[i+1],1);
+           //weights[i] = Nd4j.ones(sizes[i+1],sizes[i]);
 
             // skew each bias and weight by a normally distributed random scalar
-            biases[i] = biases[i].mul(rnd.nextGaussian());
-            weights[i] = weights[i].mul(rnd.nextGaussian());
+            biases[i] = gaussianDistribution( Nd4j.ones(sizes[i+1],1) );
+            weights[i] = gaussianDistribution( Nd4j.ones(sizes[i+1],sizes[i]) );
         }
     }
+
+    private INDArray gaussianDistribution(INDArray M) {
+
+        INDArray prod = Nd4j.create(M.rows(), M.columns());
+
+        Random rnd = new Random();  // TODO test initializing rnd in loops for more initial variation
+        for(int i = 0, r = M.rows(); i < r; i++) {
+            for (int j = 0, c = M.columns(); j < c; j++) {
+                prod.put(i, j, M.getDouble(i, j) * rnd.nextGaussian());
+            }
+        }
+
+        return prod;
+    }
+
 
     /**
      * Returns the output of the network if a is input
      */
     public INDArray feedForward(INDArray a) {
         INDArray b = a.dup();
-        INDArray c = b.dup();
 
         for (int i = 0, len = this.layerCount - 1; i < len; i++) {
             // feed forward algorithm
             // multiply the two matrices then add the matrix b.
             // Wrap around sigmoid to reduce range to [-1, 1]
-            // product = weights[i].mul(b).add(biases[i]);
-            //b = sigmoid(product);
-            //Nd4j.getEx
-            c = sigmoid(weights[i].mmul(b).add(biases[i]));
+            b = sigmoid(weights[i].mmul(b).add(biases[i]));
         }
 
-        return c;
+        return b;
     }
 
     /**
@@ -96,12 +108,13 @@ public class NNetwork {
         for (int i = 0; i < epochs; i++) {
             for (int j = 0; j < trainDataSize - miniBatchSize; j += miniBatchSize) {
                 // split array into two
-                TrainingData[] first = new TrainingData[miniBatchSize];
-                System.arraycopy(trainingData, j, first, 0, j + miniBatchSize);
+               // TrainingData[] first = new TrainingData[miniBatchSize];
+             //   System.arraycopy(trainingData, j, first, 0, j + miniBatchSize);
 
-                updateBatch(first, eta);
+                TrainingData[] newBatch = Arrays.copyOfRange(trainingData, j, j + miniBatchSize);
+                updateBatch(newBatch, eta);
             }
-
+            System.out.println("#### eval time ####");
             int correct = evaluate(testData);
             System.out.println("Epoch " + (i + 1) + ": " + correct + "/" + testDataSize);
         }
@@ -123,7 +136,24 @@ public class NNetwork {
         }
 
         for (int i = 0; i < batchSize; i++) {
+            List<INDArray[]> deltas = backPropagation(batch[i], nabla_b, nabla_w);
+            INDArray[] delta_nabla_b = deltas.get(0);
+            INDArray[] delta_nabla_w = deltas.get(1);
 
+            for (int j = 0, len = this.layerCount - 1; j < len; j++) {
+                nabla_b[j] = nabla_b[j].add(delta_nabla_b[j]);
+                nabla_w[j] = nabla_w[j].add(delta_nabla_w[j]);
+            }
+        }
+
+        for (int i = 0, len = this.layerCount - 1; i < len; i++) {
+            // w - (eta / len(batch)) * nw
+            INDArray tmp = nabla_w[i].mul(eta / batchSize);
+            weights[i] = weights[i].sub(tmp);
+            //INDArray nwee = tmp.sub(weights[i]);
+
+            tmp = nabla_b[i].mul(eta / batchSize);
+            biases[i] = biases[i].sub(tmp);
         }
     }
 
@@ -132,12 +162,23 @@ public class NNetwork {
      * nabla_b & nabla_b are layer by layer lists of arrays
      */
     public List<INDArray[]> backPropagation(TrainingData trainingData, INDArray[] nabla_b, INDArray[] nabla_w) {
-        List<INDArray> activations = new ArrayList<INDArray>();
+        // must duplicate, otherwise nabla_b and nabla_w will be alter which is undesired behavior
+        INDArray[] nabla_b_2 = new INDArray[this.layerCount - 1];
+        INDArray[] nabla_w_2 = new INDArray[this.layerCount - 1];
+
+        System.arraycopy(nabla_b, 0, nabla_b_2, 0, nabla_b_2.length);
+        System.arraycopy(nabla_w, 0, nabla_w_2, 0, nabla_w_2.length);
+
         INDArray activation = trainingData.getX();
+        List<INDArray> activations = new ArrayList<INDArray>();
+        activations.add(activation);
         List<INDArray> zVector = new ArrayList<INDArray>();
+
 
         for (int i = 0, len = this.layerCount - 1; i < len; i++) {
             INDArray z = weights[i].mmul(activation).add(biases[i]);
+            //INDArray z = activation.mmul(weights[i]).add(biases[i]);
+
             zVector.add(z);
 
             activation = sigmoid(z);
@@ -145,24 +186,22 @@ public class NNetwork {
         }
 
         INDArray delta = costDerivation(activations.get(activations.size() - 1), trainingData.getY());
-        delta = hadamardProduct(delta , sigmoidPrime(zVector.get(zVector.size() - 1))); // TODO schur prod
+        delta = hadamardProduct(delta , sigmoidPrime(zVector.get(zVector.size() - 1)));
 
-        nabla_b[nabla_b.length - 1] = delta;
-        nabla_w[nabla_w.length - 1] = delta.mmul(activations.get(activations.size() - 2).transpose());
+        nabla_b_2[nabla_b_2.length - 1] = delta;
+        nabla_w_2[nabla_w_2.length - 1] = delta.mmul(activations.get(activations.size() - 2).transpose());
 
-        for (int i = nabla_b.length - 2; i >= 0; i-- ) {
+        for (int i = nabla_b_2.length - 2; i >= 0; i-- ) {
             INDArray z = zVector.get(i);
             INDArray sp = sigmoidPrime(z);
 
             delta = hadamardProduct(weights[i + 1].transpose().mmul(delta), sp);
-            nabla_b[i] = delta;
-            nabla_w[i] = delta.mmul(activations.get(i).transpose());
+            nabla_b_2[i] = delta;
+            nabla_w_2[i] = delta.mmul(activations.get(i).transpose());
         }
-
         List<INDArray[]> ret = new ArrayList<INDArray[]>();
-        ret.add(nabla_b);
-        ret.add(nabla_w);
-
+        ret.add(nabla_b_2);
+        ret.add(nabla_w_2);
         return ret;
     }
 
@@ -171,7 +210,7 @@ public class NNetwork {
      */
     public int evaluate(ValidationData[] testData) {
         int numberCorrect = 0;
-
+        System.out.println("begin eval");
         for (ValidationData tuple : testData) {
             INDArray output = feedForward(tuple.getX());
 
@@ -180,7 +219,9 @@ public class NNetwork {
 
             for (int i = 0, rows = tuple.getX().rows(); i < rows; i++) {
                 // get index the result and output rows with the highest value
-                maxOutputRow = getMaxIndex(tuple.getX(), maxOutputRow);
+
+                maxOutputRow = getMaxIndex(output, maxOutputRow);
+
                 maxResultRow = getMaxIndex(tuple.getX(), maxResultRow);
             }
 
@@ -211,7 +252,10 @@ public class NNetwork {
     public INDArray sigmoidPrime(INDArray z) {
         // let s = sigmoid(z) and I be the NxN identity matrix
         // returns s * (I - z)
-        return sigmoid(z).mmul((Nd4j.eye(z.rows()).sub(sigmoid(z))));  // TODO may need to use z.cols or hamardProd
+        INDArray sig = sigmoid(z);
+        sig = z.sub(1);
+
+        return hadamardProduct(sigmoid(z), sig);  // TODO may need to use z.cols or hamardProd
     }
 
     private int getMaxIndex(INDArray a, int comp) {
@@ -230,7 +274,13 @@ public class NNetwork {
         return comp;
     }
 
-
+    /**
+     * Schur product thm, Hadamard product of 2 definite matrices is also a definite matrix where
+     *      Let A, B be two MxN matrices. The product of M and W is A such that C = [a_11, ..., a_mn] and { a_ij | M[a_ij] * W[a_ij] }
+     * @param M an MxN Matrix
+     * @param W
+     * @return Hadamard product of two MxN matrices
+     */
     INDArray hadamardProduct(INDArray M, INDArray W){
         INDArray prod = Nd4j.create(W.rows(), W.columns());
 
