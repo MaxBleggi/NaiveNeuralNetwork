@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/main/java/NNetwork.java" line="149" />
+    <bookmark url="file://$PROJECT_DIR$/src/main/java/NNetwork.java" line="222" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f8d39f97-5737-479a-a021-201d8bf02ad1" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/Model/NablaPair.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NeuralNetwork.iml" beforeDir="false" afterPath="$PROJECT_DIR$/NeuralNetwork.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Driver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Driver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/MNIST_Loader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MNIST_Loader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Model/DataTuple.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Model/DataTuple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Model/TrainingData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Model/TrainingData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Model/ValidationData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Model/ValidationData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/NNetwork.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/NNetwork.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -24,8 +33,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Driver.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
-              <caret line="29" column="58" selection-start-line="29" selection-start-column="50" selection-end-line="29" selection-end-column="58" />
+            <state relative-caret-position="156">
+              <caret line="11" column="89" selection-start-line="11" selection-start-column="89" selection-end-line="11" selection-end-column="89" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -36,8 +45,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/MNIST_DarknessClassifier.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="53" selection-start-line="2" selection-start-column="53" selection-end-line="2" selection-end-column="53" />
+            <state relative-caret-position="306">
+              <caret line="18" column="7" selection-start-line="18" selection-start-column="7" selection-end-line="18" selection-end-column="7" />
             </state>
           </provider>
         </entry>
@@ -54,42 +63,28 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/NNetwork.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="540">
-              <caret line="241" lean-forward="true" selection-start-line="241" selection-end-line="241" />
+            <state relative-caret-position="-1268">
+              <caret line="123" column="38" lean-forward="true" selection-start-line="123" selection-start-column="38" selection-end-line="123" selection-end-column="38" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#6788#6798#0" expanded="true" />
-                <element signature="e#5143#5153#0" expanded="true" />
-                <element signature="e#6182#6194#0" expanded="true" />
-                <element signature="e#6505#6506#0" expanded="true" />
-                <element signature="e#6544#6545#0" expanded="true" />
-                <element signature="e#9757#9758#0" expanded="true" />
-                <element signature="e#9831#9832#0" expanded="true" />
+                <element signature="e#8801#8817#0" expanded="true" />
+                <element signature="e#8910#8926#0" expanded="true" />
+                <element signature="e#10960#10961#0" expanded="true" />
+                <element signature="e#11012#11013#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Model/TrainingData.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/MNIST_Loader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="91" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="91" />
+            <state relative-caret-position="1190">
+              <caret line="70" column="64" selection-start-line="70" selection-start-column="64" selection-end-line="70" selection-end-column="64" />
               <folding>
-                <element signature="e#510#511#0" expanded="true" />
-                <element signature="e#534#535#0" expanded="true" />
-                <element signature="e#564#565#0" expanded="true" />
-                <element signature="e#588#589#0" expanded="true" />
+                <element signature="imports" expanded="true" />
+                <element signature="e#8239#8247#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Model/ValidationData.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="14" column="19" lean-forward="true" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -111,6 +106,8 @@
       <find>weights[i]</find>
       <find>Epoch</find>
       <find>out of</find>
+      <find>DoubleMatrix</find>
+      <find>false</find>
       <find>print</find>
     </findStrings>
   </component>
@@ -127,14 +124,15 @@
         <option value="$PROJECT_DIR$/src/MNIST_Loader.java" />
         <option value="$PROJECT_DIR$/src/Model/DataTuple.java" />
         <option value="$PROJECT_DIR$/src/main/java/MNIST_Expansion.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Model/NNetworkInputLoad.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/Model/DataTuple.java" />
         <option value="$PROJECT_DIR$/src/main/java/Model/TrainingData.java" />
         <option value="$PROJECT_DIR$/src/main/java/Model/ValidationData.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Model/NNetworkInputLoad.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/Driver.java" />
         <option value="$PROJECT_DIR$/src/main/java/MNIST_Loader.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Model/NablaPair.java" />
         <option value="$PROJECT_DIR$/src/main/java/NNetwork.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Driver.java" />
       </list>
     </option>
   </component>
@@ -168,7 +166,7 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-7" />
-    <option name="width" value="1294" />
+    <option name="width" value="1336" />
     <option name="height" value="1087" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -179,6 +177,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -217,7 +216,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -230,7 +228,7 @@
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15625" />
-    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="project.structure.side.proportion" value="0.14836796" />
     <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
   </component>
   <component name="RecentsManager">
@@ -272,11 +270,12 @@
       <updated>1558827175400</updated>
       <workItem from="1558827180511" duration="4744000" />
       <workItem from="1558832054398" duration="33904000" />
+      <workItem from="1559093737821" duration="16516000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="77533000" />
+    <option name="totallyTimeSpent" value="98838000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -288,7 +287,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="0" width="1294" height="1087" extended-state="0" />
+    <frame x="-7" y="0" width="1336" height="1087" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Structure" order="0" side_tool="true" weight="0.25" />
@@ -297,10 +296,10 @@
       <window_info id="UI Designer" order="3" />
       <window_info id="Capture Tool" order="4" />
       <window_info id="Favorites" order="5" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="6" visible="true" weight="0.19124797" />
+      <window_info content_ui="combo" id="Project" order="6" visible="true" weight="0.23746082" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.15303983" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.26939204" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3773585" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -310,7 +309,7 @@
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Terminal" order="10" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="12" weight="0.3298731" />
+      <window_info anchor="bottom" id="Messages" order="12" weight="0.32914045" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.24983692" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -331,16 +330,13 @@
     </ignored-roots>
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/NNetwork.java</url>
-          <line>122</line>
-          <properties />
-          <option name="timeStamp" value="24" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="batch[3]" />
+        <watch expression="biases[i]" language="JAVA" />
+        <watch expression="biases[i]" language="JAVA" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
@@ -366,22 +362,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/hs_err_pid25684.log" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/Model/DataTuple.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="25" column="19" lean-forward="true" selection-start-line="25" selection-start-column="19" selection-end-line="25" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1009#1010#0" expanded="true" />
-            <element signature="e#1033#1034#0" expanded="true" />
-            <element signature="e#937#938#0" expanded="true" />
-            <element signature="e#961#962#0" expanded="true" />
-            <element signature="e#1127#1128#0" expanded="true" />
-            <element signature="e#1156#1157#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Model/TestingData.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/Model/NNetworkInputLoad.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -394,13 +374,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="4" column="30" selection-start-line="4" selection-start-column="30" selection-end-line="4" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/MNIST_DarknessClassifier.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="53" selection-start-line="2" selection-start-column="53" selection-end-line="2" selection-end-column="53" />
         </state>
       </provider>
     </entry>
@@ -432,27 +405,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/MNIST_Svm.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="90" selection-start-line="1" selection-start-column="90" selection-end-line="1" selection-end-column="90" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/MNIST_Loader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="283">
-          <caret line="213" column="43" lean-forward="true" selection-start-line="213" selection-start-column="43" selection-end-line="213" selection-end-column="43" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Model/TrainingData.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="91" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="91" />
+        <state relative-caret-position="374">
+          <caret line="22" column="25" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
           <folding>
             <element signature="e#510#511#0" expanded="true" />
             <element signature="e#534#535#0" expanded="true" />
@@ -462,36 +418,82 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Driver.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/Model/ValidationData.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="29" column="58" selection-start-line="29" selection-start-column="50" selection-end-line="29" selection-end-column="58" />
+        <state relative-caret-position="34">
+          <caret line="2" column="39" selection-start-line="2" selection-start-column="39" selection-end-line="2" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Model/DataTuple.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="24" column="26" selection-start-line="24" selection-start-column="25" selection-end-line="24" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Model/ValidationData.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/MNIST_Loader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="19" lean-forward="true" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
+        <state relative-caret-position="1190">
+          <caret line="70" column="64" selection-start-line="70" selection-start-column="64" selection-end-line="70" selection-end-column="64" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#8239#8247#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Model/NablaPair.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="29" lean-forward="true" selection-start-line="6" selection-start-column="29" selection-end-line="6" selection-end-column="29" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#374#375#0" expanded="true" />
+            <element signature="e#404#405#0" expanded="true" />
+            <element signature="e#448#449#0" expanded="true" />
+            <element signature="e#478#479#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/MNIST_Svm.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="90" selection-start-line="1" selection-start-column="90" selection-end-line="1" selection-end-column="90" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/MNIST_DarknessClassifier.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="7" selection-start-line="18" selection-start-column="7" selection-end-line="18" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Driver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="156">
+          <caret line="11" column="89" selection-start-line="11" selection-start-column="89" selection-end-line="11" selection-end-column="89" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/NNetwork.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="241" lean-forward="true" selection-start-line="241" selection-end-line="241" />
+        <state relative-caret-position="-1268">
+          <caret line="123" column="38" lean-forward="true" selection-start-line="123" selection-start-column="38" selection-end-line="123" selection-end-column="38" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#6788#6798#0" expanded="true" />
-            <element signature="e#5143#5153#0" expanded="true" />
-            <element signature="e#6182#6194#0" expanded="true" />
-            <element signature="e#6505#6506#0" expanded="true" />
-            <element signature="e#6544#6545#0" expanded="true" />
-            <element signature="e#9757#9758#0" expanded="true" />
-            <element signature="e#9831#9832#0" expanded="true" />
+            <element signature="e#8801#8817#0" expanded="true" />
+            <element signature="e#8910#8926#0" expanded="true" />
+            <element signature="e#10960#10961#0" expanded="true" />
+            <element signature="e#11012#11013#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -505,7 +507,7 @@
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
+                <option value="0.14836796" />
               </list>
             </option>
           </splitter-proportions>
@@ -513,10 +515,11 @@
       </state>
       <state key="FacetStructureConfigurable.UI">
         <settings>
+          <last-edited>No facets are configured</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
+                <option value="0.14836796" />
               </list>
             </option>
           </splitter-proportions>
@@ -527,7 +530,7 @@
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
+                <option value="0.14836796" />
               </list>
             </option>
           </splitter-proportions>
@@ -535,10 +538,11 @@
       </state>
       <state key="JdkListConfigurable.UI">
         <settings>
+          <last-edited>12</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
+                <option value="0.14836796" />
               </list>
             </option>
           </splitter-proportions>
@@ -550,7 +554,7 @@
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
+                <option value="0.14836796" />
               </list>
             </option>
           </splitter-proportions>
@@ -569,10 +573,11 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
+          <last-edited>Maven: org.bytedeco.javacpp-presets:openblas:0.2.20-1.4</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
+                <option value="0.14836796" />
               </list>
             </option>
           </splitter-proportions>

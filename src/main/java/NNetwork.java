@@ -1,21 +1,18 @@
+import Model.NablaPair;
 import Model.TrainingData;
 import Model.ValidationData;
-import org.nd4j.context.Nd4jContext;
-import org.nd4j.linalg.api.iter.NdIndexIterator;
-import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.api.ops.impl.transforms.Sigmoid;
-import org.nd4j.linalg.cpu.nativecpu.NDArray;
-import org.nd4j.linalg.factory.Nd4j;
-import org.nd4j.linalg.factory.Nd4jBackend;
-import org.nd4j.nativeblas.Nd4jBlas;
-import org.nd4j.*;
-import org.nd4j.nativeblas.Nd4jCpu;
+import cern.colt.function.DoubleDoubleFunction;
+import cern.colt.matrix.DoubleMatrix1D;
+import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.impl.DenseDoubleMatrix1D;
+import cern.colt.matrix.impl.DenseDoubleMatrix2D;
+import cern.colt.matrix.linalg.Algebra;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 
 /**
  * Implementation of a classic Neural Network in Java.  It makes use of Stochastic Descent Learning for it's feedforward network.
@@ -24,8 +21,8 @@ import java.util.Random;
 public class NNetwork {
 
     private int[] sizes;
-    private INDArray[] biases;
-    private INDArray[] weights;
+    private DoubleMatrix1D[] biases;
+    private DoubleMatrix2D[] weights;
     private int layerCount;
 
     /**
@@ -44,8 +41,8 @@ public class NNetwork {
         this.layerCount = sizes.length;
         this.sizes = sizes;
 
-        this.biases = new INDArray[this.layerCount - 1];
-        this.weights = new INDArray[this.layerCount - 1];
+        this.biases = new DenseDoubleMatrix1D[this.layerCount - 1];
+        this.weights = new DenseDoubleMatrix2D[this.layerCount - 1];
 
         // list of seeds for biases using normal distribution
         for (int i = 0, len = this.layerCount - 1; i < len; i++) {
@@ -53,20 +50,35 @@ public class NNetwork {
            //weights[i] = Nd4j.ones(sizes[i+1],sizes[i]);
 
             // skew each bias and weight by a normally distributed random scalar
-            biases[i] = gaussianDistribution( Nd4j.ones(sizes[i+1],1) );
-            weights[i] = gaussianDistribution( Nd4j.ones(sizes[i+1],sizes[i]) );
+            biases[i] = gaussianDistribution( new DenseDoubleMatrix1D(sizes[i+1]) );
+            weights[i] = gaussianDistribution( new DenseDoubleMatrix2D(sizes[i+1], sizes[i]) );
         }
     }
 
-    private INDArray gaussianDistribution(INDArray M) {
+    private DenseDoubleMatrix1D gaussianDistribution(DenseDoubleMatrix1D V) {
 
-        INDArray prod = Nd4j.create(M.rows(), M.columns());
+        DenseDoubleMatrix1D prod = new DenseDoubleMatrix1D(V.size());
 
           // TODO test initializing rnd in loops for more initial variation
-        for(int i = 0, r = M.rows(); i < r; i++) {
-            for (int j = 0, c = M.columns(); j < c; j++) {
+        for(int i = 0, r = V.size(); i < r; i++) {
                 Random rnd = new Random();
-                prod.put(i, j, M.getDouble(i, j) * rnd.nextGaussian());
+             //   prod.put(i, j, M.getDouble(i, j) * rnd.nextGaussian());
+                prod.set(i, rnd.nextGaussian());
+        }
+
+        return prod;
+    }
+
+    private DenseDoubleMatrix2D gaussianDistribution(DenseDoubleMatrix2D W) {
+
+        DenseDoubleMatrix2D prod = new DenseDoubleMatrix2D(W.rows(), W.columns());
+
+        // TODO test initializing rnd in loops for more initial variation
+        for(int i = 0, r = W.rows(); i < r; i++) {
+            for (int j = 0, c = W.columns(); j < c; j++) {
+                Random rnd = new Random();
+                //   prod.put(i, j, M.getDouble(i, j) * rnd.nextGaussian());
+                prod.set(i, j, rnd.nextGaussian());
             }
         }
 
@@ -77,17 +89,78 @@ public class NNetwork {
     /**
      * Returns the output of the network if a is input
      */
-    public INDArray feedForward(INDArray a) {
-        INDArray b = a.dup();
+    public DoubleMatrix1D feedForward(DoubleMatrix1D a) {
+        DoubleMatrix1D b = a.copy();
 
         for (int i = 0, len = this.layerCount - 1; i < len; i++) {
             // feed forward algorithm
             // multiply the two matrices then add the matrix b.
             // Wrap around sigmoid to reduce range to [-1, 1]
-            b = sigmoid(weights[i].mmul(b).add(biases[i]));
+           // b = sigmoid(weights[i].m(b).add(biases[i]));
+            // b = W * a
+            b = sigmoid( matrixAddition(matrixMult(weights[i], b), biases[i]) );
+         //   weights[i].zMult(a, b);
         }
 
         return b;
+    }
+
+    private DoubleMatrix1D matrixAddition(DoubleMatrix1D a, DoubleMatrix1D b) {
+        DoubleDoubleFunction plus = Double::sum;
+        DoubleMatrix1D sum = a.copy();
+        sum.assign(b, plus);
+        return sum;
+    }
+
+    private DoubleMatrix2D matrixAddition(DoubleMatrix2D a, DoubleMatrix2D b) {
+        DoubleDoubleFunction plus = Double::sum;
+        DoubleMatrix2D sum = a.copy();
+        sum.assign(b, plus);
+        return sum;
+    }
+
+    private DoubleMatrix1D matrixSubtraction(DoubleMatrix1D a, DoubleMatrix1D b) {
+        DoubleDoubleFunction sub = (v, v1) -> v - v1;
+        DoubleMatrix1D sum = a.copy();
+        sum.assign(b, sub);
+        return sum;
+    }
+
+    private DoubleMatrix2D matrixSubtraction(DoubleMatrix2D a, DoubleMatrix2D b) {
+        DoubleDoubleFunction sub = (v, v1) -> v - v1;
+        DoubleMatrix2D sum = a.copy();
+        sum.assign(b, sub);
+        return sum;
+    }
+
+    private DoubleMatrix2D scalarMult(DoubleMatrix2D a, double scalar) {
+        DoubleMatrix2D prod = a.copy();
+        for (int i = 0, r = a.rows(); i < r; i++) {
+            for (int j = 0, c = a.columns(); j < c; j++) {
+                prod.set(i, j, a.get(i, j) * scalar);
+            }
+        }
+        return prod;
+    }
+
+    private DoubleMatrix1D scalarMult(DoubleMatrix1D a, double scalar) {
+        DoubleMatrix1D prod = a.copy();
+        for (int i = 0, r = a.size(); i < r; i++) {
+            prod.set(i, a.getQuick(i) * scalar);
+        }
+        return prod;
+    }
+
+    private DoubleMatrix1D matrixMult(DoubleMatrix2D a, DoubleMatrix1D b) {
+        DoubleMatrix1D prod = new DenseDoubleMatrix1D(a.rows());
+        a.zMult(b, prod);
+        return prod;
+    }
+
+    private DoubleMatrix2D matrixMult(DoubleMatrix2D a, DoubleMatrix2D b) {
+        DoubleMatrix2D prod = new DenseDoubleMatrix2D(a.rows(), b.columns());
+        a.zMult(b, prod);
+        return prod;
     }
 
     /**
@@ -144,35 +217,38 @@ public class NNetwork {
     public void updateBatch(TrainingData[] batch, double eta) {
         int batchSize = batch.length;
 
-        INDArray[] nabla_b = new INDArray[this.layerCount - 1];
-        INDArray[] nabla_w = new INDArray[this.layerCount - 1];
+        DoubleMatrix1D[] nabla_b = new DoubleMatrix1D[this.layerCount - 1];
+        DoubleMatrix2D[] nabla_w = new DoubleMatrix2D[this.layerCount - 1];
 
         for (int i = 0, len = this.layerCount - 1; i < len; i++) {
-            nabla_b[i] = Nd4j.create(biases[i].rows(), biases[i].columns());
-            nabla_w[i] = Nd4j.create(weights[i].rows(), weights[i].columns());
+            nabla_b[i] = new DenseDoubleMatrix1D(biases[i].size());  // TODO nabla_w is redicuously expensive to initialize
+            nabla_w[i] = new DenseDoubleMatrix2D(weights[i].rows(), weights[i].columns());
         }
 
         for (int i = 0; i < batchSize; i++) {
-            List<INDArray[]> deltas = backPropagation(batch[i], nabla_b, nabla_w);
-            INDArray[] delta_nabla_b = deltas.get(0);
-            INDArray[] delta_nabla_w = deltas.get(1);
+            NablaPair deltas = backPropagation(batch[i], nabla_b, nabla_w);
+            DoubleMatrix1D[] delta_nabla_b = deltas.getNabla_b();
+            DoubleMatrix2D[] delta_nabla_w = deltas.getNabla_w();
 
             for (int j = 0, len = this.layerCount - 1; j < len; j++) {
-                nabla_b[j] = nabla_b[j].add(delta_nabla_b[j]);
-                nabla_w[j] = nabla_w[j].add(delta_nabla_w[j]);
+             //   nabla_b[j] = nabla_b[j].add(delta_nabla_b[j]);
+                nabla_b[j] = matrixAddition(nabla_b[j], delta_nabla_b[j]);
+            //    nabla_w[j] = nabla_w[j].add(delta_nabla_w[j]);
+                nabla_w[j] = matrixAddition(nabla_w[j], delta_nabla_w[j]);
             }
         }
 
         for (int i = 0, len = this.layerCount - 1; i < len; i++) {
             // w - (eta / len(batch)) * nw
-            INDArray tmp = nabla_w[i].mul((eta / batchSize));
-
-            weights[i] = weights[i].sub(tmp);
+            //DoubleMatrix2D tmp = nabla_w[i].mul((eta / batchSize));
+            DoubleMatrix2D tmp = scalarMult(nabla_w[i], (eta / batchSize));
+            weights[i] = matrixSubtraction(weights[i], tmp);
+           // weights[i] = weights[i].sub(tmp);
             //INDArray nwee = tmp.sub(weights[i]);
-
-            tmp = nabla_b[i].mul((eta / batchSize));
-
-            biases[i] = biases[i].sub(tmp);
+            DoubleMatrix1D tmp2 = scalarMult(nabla_b[i], (eta / batchSize));
+         //   tmp = nabla_b[i].mul((eta / batchSize));
+            biases[i] = matrixSubtraction(biases[i], tmp2);
+           // biases[i] = biases[i].sub(tmp2);
         }
     }
 
@@ -180,28 +256,31 @@ public class NNetwork {
      * Returns a tuple (nabla_b, nabla_w) representing the descent gradient for the cost function Cx
      * nabla_b & nabla_b are layer by layer lists of arrays
      */
-    public List<INDArray[]> backPropagation(TrainingData trainingData, INDArray[] nabla_b, INDArray[] nabla_w) {
+    public NablaPair backPropagation(TrainingData trainingData, DoubleMatrix1D[] nabla_b, DoubleMatrix2D[] nabla_w) {
         // must duplicate, otherwise nabla_b and nabla_w will be alter which is undesired behavior
-        INDArray[] nabla_b_2 = new INDArray[this.layerCount - 1];
-        INDArray[] nabla_w_2 = new INDArray[this.layerCount - 1];
+        DoubleMatrix1D[] nabla_b_2 = new DenseDoubleMatrix1D[this.layerCount - 1];
+        DoubleMatrix2D[] nabla_w_2 = new DenseDoubleMatrix2D[this.layerCount - 1];
 
         // TODO possible bug, may need to recreate nabla
-        //System.arraycopy(nabla_b, 0, nabla_b_2, 0, nabla_b_2.length);
-        //System.arraycopy(nabla_w, 0, nabla_w_2, 0, nabla_w_2.length);
+        System.arraycopy(nabla_b, 0, nabla_b_2, 0, nabla_b_2.length);
+        System.arraycopy(nabla_w, 0, nabla_w_2, 0, nabla_w_2.length);
 
-        for(int i = 0, len = this.layerCount - 1; i < len; i++){
-            nabla_b_2[i] = Nd4j.create(biases[i].rows(), biases[i].columns());
-            nabla_w_2[i] = Nd4j.create(weights[i].rows(), weights[i].columns());
-        }
+     //   for(int i = 0, len = this.layerCount - 1; i < len; i++){
+     //       nabla_b_2[i] = Nd4j.create(biases[i].rows(), biases[i].columns());
+    //        nabla_w_2[i] = Nd4j.create(weights[i].rows(), weights[i].columns());
+     //   }
 
-        INDArray activation = trainingData.getX();
-        List<INDArray> activations = new ArrayList<INDArray>();
+        DoubleMatrix1D activation = trainingData.getX();
+        List<DoubleMatrix1D> activations = new ArrayList<DoubleMatrix1D>();
         activations.add(activation);
-        List<INDArray> zVector = new ArrayList<INDArray>();
+        List<DoubleMatrix1D> zVector = new ArrayList<DoubleMatrix1D>();
 
 
         for (int i = 0, len = this.layerCount - 1; i < len; i++) {
-            INDArray z = weights[i].mmul(activation).add(biases[i]);
+
+            // TODO shorten into 1 func and use elsewhere as well
+
+            DoubleMatrix1D z = matrixAddition(matrixMult(weights[i], activation), biases[i]);
             //INDArray z = activation.mmul(weights[i]).add(biases[i]);
 
             zVector.add(z);
@@ -210,25 +289,33 @@ public class NNetwork {
             activations.add(activation);
         }
 
-        INDArray delta = costDerivation(activations.get(activations.size() - 1), trainingData.getY());
+        DoubleMatrix1D delta = costDerivation(activations.get(activations.size() - 1), trainingData.getY());
         delta = hadamardProduct(delta , sigmoidPrime(zVector.get(zVector.size() - 1)));
 
         nabla_b_2[nabla_b_2.length - 1] = delta;
-        nabla_w_2[nabla_w_2.length - 1] = delta.mmul(activations.get(activations.size() - 2).transpose());
+     //   nabla_w_2[nabla_w_2.length - 1] = delta.mmul(activations.get(activations.size() - 2).transpose());
+
+        DoubleMatrix1D tmp = activations.get(activations.size() - 2);
+        DoubleMatrix2D act = tmp.like2D(tmp.size(), 1);
+
+        nabla_w_2[nabla_w_2.length - 1] = matrixMult(delta.like2D(delta.size(), 1), transpose(act));
 
         for (int i = nabla_b_2.length - 2; i >= 0; i-- ) {
-            INDArray z = zVector.get(i);
-            INDArray sp = sigmoidPrime(z);
+            DoubleMatrix1D z = zVector.get(i);
+            DoubleMatrix1D sp = sigmoidPrime(z);
 
-            delta = hadamardProduct(weights[i + 1].transpose().mmul(delta), sp);
+            delta = hadamardProduct(matrixMult(transpose(weights[i + 1]), delta), sp);
             nabla_b_2[i] = delta;
-            nabla_w_2[i] = delta.mmul(activations.get(i).transpose());
+           // nabla_w_2[i] = delta.mmul(activations.get(i).transpose());
+            DoubleMatrix2D trans = transpose(activations.get(i).like2D(activations.get(i).size(), 1));
+            nabla_w_2[i] = matrixMult(delta.like2D(delta.size(), 1), trans);
         }
 
-        List<INDArray[]> ret = new ArrayList<INDArray[]>();
-        ret.add(nabla_b_2);
-        ret.add(nabla_w_2);
-        return ret;
+        return new NablaPair(nabla_b_2, nabla_w_2);
+    }
+
+    private DoubleMatrix2D transpose(DoubleMatrix2D w) {
+        return Algebra.DEFAULT.transpose(w);
     }
 
     /**
@@ -238,7 +325,7 @@ public class NNetwork {
         int numberCorrect = 0;
 
         for (ValidationData tuple : testData) {
-            INDArray output = feedForward(tuple.getX());
+            DoubleMatrix1D output = feedForward(tuple.getX());
 
             int maxResultRow = 0;
             int maxOutputRow = 0;
@@ -260,7 +347,6 @@ public class NNetwork {
 
 
             // if they match, NNetowrk thought correctly!
-            System.out.println(maxOutputRow == tuple.getY());
             numberCorrect += maxOutputRow == tuple.getY() ? 1 : 0;
         }
 
@@ -270,46 +356,52 @@ public class NNetwork {
     /**
      * Return the vector of partial derivatives for the output activations
      */
-    public INDArray costDerivation(INDArray outputActivations, INDArray y) {
-        return outputActivations.sub(y);
+    public DoubleMatrix1D costDerivation(DoubleMatrix1D outputActivations, DoubleMatrix1D y) {
+        return matrixSubtraction(outputActivations, y);
     }
 
     /**
      * Sigmoid function
      */
-    public INDArray sigmoid(INDArray z) {
-        return Nd4j.getExecutioner().execAndReturn(new Sigmoid(z));
+    public DoubleMatrix1D sigmoid(DoubleMatrix1D z) {
+        DoubleMatrix1D prod = z.copy();
+        Function<Double, Double> lamda = (p -> 1 / (1 + Math.pow(Math.E, -p)));
+
+        for(int i = 0, len = prod.size(); i < len; i++){
+                double v = lamda.apply(prod.getQuick(i));
+                prod.setQuick(i, v);
+        }
+        return prod;
     }
 
     /**
      * Derivative of Sigmoid function
      */
-    public INDArray sigmoidPrime(INDArray z) {
+    public DoubleMatrix1D sigmoidPrime(DoubleMatrix1D z) {
         // let s = sigmoid(z) and I be the NxN identity matrix
         // returns s * (I - z)
-        INDArray sig = sigmoid(z);
-        INDArray ones = Nd4j.ones(sig.rows(), sig.columns()); // TODO test
-        sig = ones.sub(sig);
-        //sig = sig.sub(1);
+        DoubleMatrix1D sig = sigmoid(z);
+
+        Function<Double, Double> lamda = (p -> 1 - p);
+        for(int i = 0, len = sig.size(); i < len; i++){
+            double v = lamda.apply(sig.getQuick(i));
+            sig.setQuick(i, v);
+        }
 
         return hadamardProduct(sigmoid(z), sig);  // TODO may need to use z.cols or hamardProd
     }
 
-    private int getMaxIndex(INDArray a) {
-        NdIndexIterator iter2 = new NdIndexIterator(a.rows(), a.columns());
-
+    private int getMaxIndex(DoubleMatrix1D a) {
         double biggest = 0.0;
         int biggestIndex = 0;
-        int i = 0;
-        while (iter2.hasNext()) {
-            int[] nextIndex = iter2.next();
-            double nextVal = a.getDouble(nextIndex);
 
-            if (nextVal > biggest) {
-                biggest = nextVal;
+        for (int i = 0, len = a.size(); i < len; i++) {
+            double next = a.get(i);
+
+            if (next > biggest) {
+                biggest = next;
                 biggestIndex = i;
             }
-            i++;
         }
 
         return biggestIndex;
@@ -322,13 +414,11 @@ public class NNetwork {
      * @param W
      * @return Hadamard product of two MxN matrices
      */
-    INDArray hadamardProduct(INDArray M, INDArray W){
-        INDArray prod = Nd4j.create(W.rows(), W.columns());
+    DoubleMatrix1D hadamardProduct(DoubleMatrix1D M, DoubleMatrix1D W){
+        DoubleMatrix1D prod = W.copy();
 
-        for(int i = 0, r = W.rows(); i < r; i++) {
-            for (int j = 0, c = W.columns(); j < c; j++) {
-                prod.put(i, j, M.getDouble(i, j) * W.getDouble(i, j));
-            }
+        for(int i = 0, r = W.size(); i < r; i++) {
+            prod.set(i, M.get(i) * W.get(i));
         }
 
         return prod;

@@ -1,6 +1,6 @@
 package Model;
 
-import org.nd4j.linalg.api.ndarray.INDArray;
+import cern.colt.matrix.DoubleMatrix1D;
 
 /**
  *  Let TrainingData be a 2-tuples X = (x,y) such that
@@ -8,19 +8,19 @@ import org.nd4j.linalg.api.ndarray.INDArray;
  *      { y | [y] is 10-dimensional array corresponding to the unit vector for the correct image }
  */
 public class TrainingData {
-    private INDArray x;
-    private INDArray y;
+    private DoubleMatrix1D x;
+    private DoubleMatrix1D y;
 
-    public TrainingData(INDArray x, INDArray y) {
+    public TrainingData(DoubleMatrix1D x, DoubleMatrix1D y) {
         this.x = x;
         this.y = y;
     }
 
-    public INDArray getX() {
+    public DoubleMatrix1D getX() {
         return x;
     }
 
-    public INDArray getY() {
+    public DoubleMatrix1D getY() {
         return y;
     }
 }

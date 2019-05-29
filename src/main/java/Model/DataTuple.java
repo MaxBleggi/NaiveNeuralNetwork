@@ -1,7 +1,7 @@
 package Model;
 
-import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.cpu.nativecpu.NDArray;
+import cern.colt.matrix.DoubleMatrix1D;
+import cern.colt.matrix.DoubleMatrix2D;
 
 /**
  * Let DataTuple be a 2-tuple DT such that:
@@ -16,23 +16,23 @@ import org.nd4j.linalg.cpu.nativecpu.NDArray;
  */
 public class DataTuple {
 
-    private INDArray[] x;
-    private INDArray y;
+    private DoubleMatrix1D[] x;
+    private DoubleMatrix1D y;
     private int labels;
     private int nRows;
     private int nCols;
 
-    public DataTuple(INDArray[] x, INDArray y, int labels) {
+    public DataTuple(DoubleMatrix1D[] x, DoubleMatrix1D y, int labels) {
         this.x = x;
         this.y = y;
         this.labels = labels;
     }
 
-    public INDArray[] getX() {
+    public DoubleMatrix1D[] getX() {
         return x;
     }
 
-    public INDArray getY() {
+    public DoubleMatrix1D getY() {
         return y;
     }
 

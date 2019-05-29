@@ -2,11 +2,8 @@ import Model.DataTuple;
 import Model.NNetworkInputLoad;
 import Model.TrainingData;
 import Model.ValidationData;
-import org.apache.log4j.BasicConfigurator;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.Arrays;
 
 public class Driver {
 
@@ -17,7 +14,6 @@ public class Driver {
 
     public static void main(String[] argv) {
 
-        BasicConfigurator.configure();
         MNIST_Loader load = new MNIST_Loader();
         try {
             NNetworkInputLoad inputLoad = load.dataWrapper(TRAINING_IMAGES, TRAINING_LABEL, TEST_IMAGES, TEST_LABELS);
@@ -25,9 +21,9 @@ public class Driver {
             ValidationData[] testData = inputLoad.getTestData();
             System.out.println("Data from MNIST successfully loaded...");
 
-            int[] sizes = {784, 28, 10};
+            int[] sizes = {784, 30, 10};
             NNetwork nn = new NNetwork(sizes);
-            nn.stochGradientDescent(trainingData, testData, 10,10, 0.5);
+            nn.stochGradientDescent(trainingData, testData, 10,30, 0.5);
 
 
         } catch (IOException e) {

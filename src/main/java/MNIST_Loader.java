@@ -2,41 +2,17 @@ import Model.DataTuple;
 import Model.NNetworkInputLoad;
 import Model.TrainingData;
 import Model.ValidationData;
-import org.nd4j.linalg.api.iter.NdIndexIterator;
-import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.cpu.nativecpu.NDArray;
-import org.nd4j.linalg.factory.Nd4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.datavec.api.io.labels.ParentPathLabelGenerator;
-import org.datavec.api.split.FileSplit;
-import org.datavec.image.loader.NativeImageLoader;
-import org.datavec.image.recordreader.ImageRecordReader;
-import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
-import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
-import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
-import org.deeplearning4j.nn.conf.inputs.InputType;
-import org.deeplearning4j.nn.conf.layers.ConvolutionLayer;
-import org.deeplearning4j.nn.conf.layers.DenseLayer;
-import org.deeplearning4j.nn.conf.layers.OutputLayer;
-import org.deeplearning4j.nn.conf.layers.SubsamplingLayer;
-import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
-import org.deeplearning4j.nn.weights.WeightInit;
-import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
-import org.deeplearning4j.util.ModelSerializer;
-import org.nd4j.linalg.activations.Activation;
-import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
-import org.nd4j.linalg.dataset.api.preprocessor.DataNormalization;
-import org.nd4j.linalg.dataset.api.preprocessor.ImagePreProcessingScaler;
-import org.nd4j.linalg.lossfunctions.LossFunctions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.util.*;
+import cern.colt.matrix.DoubleFactory2D;
+import cern.colt.matrix.DoubleMatrix1D;
+import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.impl.DenseDoubleMatrix1D;
+import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 
 import java.io.*;
-import java.util.zip.ZipFile;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 
 /**
  * Loads the MNIST image data set which is neccesary to train network
@@ -88,10 +64,11 @@ public class MNIST_Loader {
         System.out.println("labels magic number is: " + labelMagicNumber);
         System.out.println("number of labels is: " + numberOfLabels);
 
-        INDArray labelVector;
+  //      INDArray labelVector;
+        DoubleMatrix1D labelVector;
 
-        float[] labels = new float[numberOfLabels];
-        INDArray[] imageMatrices = new INDArray[numberOfItems];
+        double[] labels = new double[numberOfLabels];
+        DoubleMatrix1D[] imageMatrices = new DenseDoubleMatrix1D[numberOfItems];
 
         assert numberOfItems == numberOfLabels;
 
@@ -108,11 +85,11 @@ public class MNIST_Loader {
             }
 
             // place the image matrix W into collection
-            imageMatrices[i] =  Nd4j.create(imgData);
+            imageMatrices[i] = new DenseDoubleMatrix1D(flatten(imgData));
         }
 
 
-        labelVector = Nd4j.create(labels);
+        labelVector = new DenseDoubleMatrix1D(labels);
 
         dataInputStream.close();
         labelInputStream.close();
@@ -146,56 +123,71 @@ public class MNIST_Loader {
         DataTuple rawTestingData = loadDataTrainingData(teData, teLabel);
 
         // image vector formatting
-        INDArray[] trainingImageVectors = formatImageVector(rawTrainingData);
-        INDArray[] testingImageVectors = formatImageVector(rawTestingData);
+        DoubleMatrix1D[] trainingImageVectors = rawTrainingData.getX();
+        DoubleMatrix1D[] testingImageVectors = rawTestingData.getX();
 
         // label vector formatting
-        INDArray[] trainingLabelVectors = new INDArray[rawTrainingData.getLabels()];
+        DoubleMatrix1D[] trainingLabelVectors = new DenseDoubleMatrix1D[rawTrainingData.getLabels()];
         double[] correctLabels = new double[rawTestingData.getLabels()];
 
         // iterate over the y Vector in training data
-        INDArray trainingLabels = rawTrainingData.getY();
-        NdIndexIterator iter = new NdIndexIterator(trainingLabels.rows(), trainingLabels.columns());
-        int trainingIndex = 0;
-        while (iter.hasNext()) {
-            int[] nextIndex = iter.next();
-            double nextVal = trainingLabels.getDouble(nextIndex);
+        DoubleMatrix1D trainingLabels = rawTrainingData.getY();
 
-            // format y into V such that
-            // V == [a_0, ..., a_9] such that a_i = { 1 | i = correct digit representing M , 0 otherwise }
-            trainingLabelVectors[trainingIndex] = vectorizedResults(nextVal);
-            trainingIndex++;
+//
+//        NdIndexIterator iter = new NdIndexIterator(trainingLabels.rows(), trainingLabels.columns());
+//        int trainingIndex = 0;
+//        while (iter.hasNext()) {
+//            int[] nextIndex = iter.next();
+//            double nextVal = trainingLabels.getDouble(nextIndex);
+//
+//            // format y into V such that
+//            // V == [a_0, ..., a_9] such that a_i = { 1 | i = correct digit representing M , 0 otherwise }
+//            trainingLabelVectors[trainingIndex] = vectorizedResults(nextVal);
+//            trainingIndex++;
+//        }
+
+        // format y into V such that
+        // V == [a_0, ..., a_9] such that a_i = { 1 | i = correct digit representing M , 0 otherwise }
+        for (int i = 0, len = trainingLabels.size(); i < len; i++) {
+            trainingLabelVectors[i] = vectorizedResults(trainingLabels.getQuick(i));
         }
 
-        INDArray testingLabels = rawTestingData.getY();
-        NdIndexIterator iter2 = new NdIndexIterator(testingLabels.rows(), testingLabels.columns());
-        int testingIndex = 0;
-        while (iter2.hasNext()) {
-            int[] nextIndex = iter2.next();
-            double nextVal = testingLabels.getDouble(nextIndex);
 
-            correctLabels[testingIndex] = nextVal;
-            testingIndex++;
+
+//        INDArray testingLabels = rawTestingData.getY();
+//        NdIndexIterator iter2 = new NdIndexIterator(testingLabels.rows(), testingLabels.columns());
+//        int testingIndex = 0;
+//        while (iter2.hasNext()) {
+//            int[] nextIndex = iter2.next();
+//            double nextVal = testingLabels.getDouble(nextIndex);
+//
+//            correctLabels[testingIndex] = nextVal;
+//            testingIndex++;
+//        }
+        DoubleMatrix1D testingLabels = rawTestingData.getY();
+        for (int i = 0, len = testingLabels.size(); i < len; i++) {
+            correctLabels[i] = testingLabels.getQuick(i);
         }
 
 
         // ensure there is an equal amount of image vectors to label vectors
-        assert trainingImageVectors.length == trainingIndex;
-        assert testingImageVectors.length == testingIndex;
+        assert trainingImageVectors.length == trainingLabels.size();
+        assert testingImageVectors.length == testingLabels.size();
 
         // encapsulate data in a package for export
         // training data
-        TrainingData[] formattedTrainingData = new TrainingData[trainingIndex];
-        for (int i = 0; i < trainingIndex; i++) {
+        TrainingData[] formattedTrainingData = new TrainingData[trainingLabels.size()];
+        for (int i = 0; i < trainingLabels.size(); i++) {
             // create the list of 2-tuples
             formattedTrainingData[i] = new TrainingData(trainingImageVectors[i], trainingLabelVectors[i]);
         }
 
         // validation & testing data
-        ValidationData[] formattedValidationData = new ValidationData[testingIndex];
-        ValidationData[] formattedTestingData = new ValidationData[testingIndex];
-        for (int i = 0; i < testingIndex; i++) {
+        ValidationData[] formattedValidationData = new ValidationData[testingLabels.size()];
+        ValidationData[] formattedTestingData = new ValidationData[testingLabels.size()];
+        for (int i = 0, len = testingLabels.size(); i < len; i++) {
             // create the list of 2-tuples
+            formattedValidationData[i] = new ValidationData(testingImageVectors[i], (int)correctLabels[i]);
             formattedValidationData[i] = new ValidationData(testingImageVectors[i], (int)correctLabels[i]);
             formattedTestingData[i] = new ValidationData(testingImageVectors[i], (int)correctLabels[i]);
         }
@@ -206,18 +198,33 @@ public class MNIST_Loader {
     // format x such into M such that
     // Let M = [a_11, ..., a_mn] such that (a_ij) elementOf( R^(m*n) )
     // abstractly, M is a matrix representing 28x28 image
-    private INDArray[] formatImageVector(DataTuple rawData) {
+    /*private DoubleMatrix1D[] formatImageVector(DataTuple rawData) {
 
-        INDArray[] trainingImageVectors = new INDArray[rawData.getX().length];
+        DoubleMatrix1D[] trainingImageVectors = new DoubleMatrix1D[rawData.getX().length];
         int i = 0;
 
-        for (INDArray M : rawData.getX()) {
+        for (DoubleMatrix1D M : rawData.getX()) {
             // reshape M into (784 x 1) Vector
             trainingImageVectors[i] = M.reshape(784, 1);
+            DoubleFactory2D fact = DoubleFactory2D.dense;
+            fact.
             i++;
         }
 
         return trainingImageVectors;
+    }*/
+
+    public static double[] flatten(double[][] data) {
+        ArrayList<Double> list = new ArrayList<Double>();
+
+        for(int i = 0; i < data.length; i++) {
+            for (int j = 0; j < data[i].length; j++) {
+                list.add(data[i][j]);
+            }
+        }
+
+        Double[] D = list.toArray(new Double[0]);
+        return Stream.of(D).mapToDouble(Double::doubleValue).toArray();
     }
 
 
@@ -225,9 +232,11 @@ public class MNIST_Loader {
      * Returns a 10-dimensional unit vector with a 1.0 in the ith position and zeros elsewhere.
      * Used to convert a 0-9 digit into a corresponding desired output from the nnetwork
      */
-    public INDArray vectorizedResults(double i) {
-        INDArray v = Nd4j.zeros(10,1);
-        v.putScalar((int)i,0,1.0);
+    public DoubleMatrix1D vectorizedResults(double i) {
+        //INDArray v = Nd4j.zeros(10,1);
+        DoubleMatrix1D v = new DenseDoubleMatrix1D(10);
+     //   v.putScalar((int)i,0,1.0);
+        v.set((int)i, 1.0);
         return v;
     }
 }
